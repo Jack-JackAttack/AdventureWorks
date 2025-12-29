@@ -73,3 +73,41 @@ def barh(
     ax.grid(grid, axis="x", linestyle="--", alpha=0.6)
 
     return ax
+
+
+import matplotlib.dates as mdates
+def line(
+    ax,
+    df,
+    x_col,
+    y_col,
+    title,
+    xlabel,
+    ylabel,
+    color="steelblue",
+    linestyle="-",
+    linewidth=2,
+    marker=None,
+    grid=True
+):
+    x = df[x_col]
+    y = df[y_col]
+
+    ax.plot(
+        x,
+        y,
+        color=color,
+        linewidth=linewidth,
+        linestyle=linestyle,
+        marker=marker
+    )
+
+    ax.set_title(title, fontsize=14, fontweight="bold")
+    ax.set_xlabel(xlabel, fontsize=12)
+    ax.set_ylabel(ylabel, fontsize=12)
+    ax.grid(grid, axis="both", linestyle="--", alpha=0.6)
+    ax.tick_params(axis="x", rotation=90)
+
+    ax.xaxis.set_major_locator(mdates.MonthLocator(interval=1))
+
+    return ax

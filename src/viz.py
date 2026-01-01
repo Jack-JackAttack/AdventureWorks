@@ -35,7 +35,7 @@ def bar(
     return ax
 
 
-
+from matplotlib.ticker import FuncFormatter
 def barh(
     ax,
     df,
@@ -46,7 +46,11 @@ def barh(
     ylabel,
     color="steelblue",
     alpha=0.9,
+    fontsize=12,
+    fontsize_title=14,
+    fontsize_ylabel=14,
     show_values=True,
+    scale=1_000_000,
     grid=True
 ):
     y = df[y_col]
@@ -64,13 +68,18 @@ def barh(
                 va = "center",
                 ha = "left",
                 color = "black",
-                fontsize = 12
+                fontsize = fontsize
             )
 
-    ax.set_title(title, fontsize=14, fontweight="bold")
+    ax.set_title(title, fontsize=fontsize_title, fontweight="bold")
     ax.set_xlabel(xlabel, fontsize=12)
-    ax.set_ylabel(ylabel, fontsize=12)
+    ax.set_ylabel(ylabel, fontsize=fontsize_ylabel)
     ax.grid(grid, axis="x", linestyle="--", alpha=0.6)
+
+    #innan var skalan 1-5(1e7) på vänster y-axel. Jag ville ha den skalan från 10-50 istället. Alltså i mkr istället för kr.
+    ax.xaxis.set_major_formatter(   #betyder typ "såhär ska huvudettiketterna (1,2,3...) skrivas". Den ändrar texten inte värdena.
+        FuncFormatter(lambda x, _: f"{x / scale:.0f}") #använder bara första argumentet "x" inte andra "_". Betyder, ta ax(vänstar y-värdet) dela med 1 milj, visa som heltal. Bytte ut 1mkr mot "scale" så jag kan välja skala i ipynb.
+    )
 
     return ax
 
@@ -107,7 +116,6 @@ def line(
     ax.set_ylabel(ylabel, fontsize=12)
     ax.grid(grid, axis="both", linestyle="--", alpha=0.6)
     ax.tick_params(axis="x", rotation=90)
-
     ax.xaxis.set_major_locator(mdates.MonthLocator(interval=1))
 
     return ax

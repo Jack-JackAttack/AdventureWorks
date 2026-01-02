@@ -162,6 +162,7 @@ def grouped_bar(
         ylabel2,
         color1="steelblue",
         color2="darkorange",
+        ylabelfontsize=14,
         width=0.3,
         grid=True,
         show_values=True
@@ -192,8 +193,8 @@ def grouped_bar(
 
     ax.set_title(title, fontsize=14, fontweight="bold")
     ax.set_xlabel(xlabel, fontsize=12)
-    ax.set_ylabel(ylabel1, fontsize=12)
-    ax2.set_ylabel(ylabel2, fontsize=12)
+    ax.set_ylabel(ylabel1, fontsize=ylabelfontsize)
+    ax2.set_ylabel(ylabel2, fontsize=ylabelfontsize)
     ax.grid(grid, axis="y", linestyle="--", alpha=0.6)
 
 

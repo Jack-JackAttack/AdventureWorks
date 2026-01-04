@@ -121,7 +121,8 @@ def line(
     return ax
 
 
-
+def format_mkr(v):
+    return f""
 
 def add_bar_values(
     ax,
@@ -146,6 +147,7 @@ def add_bar_values(
 
 
 
+
 import numpy as np
 from matplotlib.ticker import FuncFormatter
 def grouped_bar(
@@ -164,6 +166,9 @@ def grouped_bar(
         color2="darkorange",
         ylabelfontsize=14,
         width=0.3,
+        scale=1_000_000,
+        formatter1="mkr",
+        formatter2="antal",
         grid=True,
         show_values=True
 ):
@@ -198,9 +203,11 @@ def grouped_bar(
     ax.grid(grid, axis="y", linestyle="--", alpha=0.6)
 
 
+
+
     #innan var skalan 1-5(1e7) på vänster y-axel. Jag ville ha den skalan från 10-50 istället. Alltså i mkr istället för kr.
     ax.yaxis.set_major_formatter(   #betyder typ "såhär ska huvudettiketterna (1,2,3...) skrivas". Den ändrar texten inte värdena.
-        FuncFormatter(lambda x, _: f"{x / 1_000_000:.0f}") #använder bara första argumentet "x" inte andra "_". Betyder, ta ax(vänstar y-värdet) dela med 1 milj, visa som heltal.
+        FuncFormatter(lambda x, _: f"{x / scale:.0f}") #använder bara första argumentet "x" inte andra "_". Betyder, ta ax(vänstar y-värdet) dela med 1 milj, visa som heltal.
     )
 
     ax.legend(  #lägger til en legend
@@ -208,16 +215,20 @@ def grouped_bar(
         [label1, label2]        #texterna som tillhör symbolerna. Alltså den blå kvadraten blir t.ex. "Total försäljning", orange kvadraten blir t.ex. "Antal ordrar"
     )
 
+    formatter_mkr = lambda v: f"{v/scale:.1f} Mkr"
+    formatter_antal = lambda v: f"{int(v):,}".replace(",", " ")
+
+
     if show_values: #om show_values är true "visa värdena ovanpå staplarna"
         add_bar_values( #anropar funktionen som placerar texten ovanpå staplarna
             ax,     #skickar koordinatsystemet (vänster y-axel) där texten ska ritas
             bars1,  #skickar info som lista för varje bar, t.ex. sin x-position, sin bredd,höjd osv.
-            formatter=lambda v: f"{v/1_000_000:.1f} Mkr" #skickar en funktion som tar ett tal och returnerar en text
+            formatter=(formatter_mkr if formatter1 == "mkr" else formatter_antal) #skickar en funktion som tar ett tal och returnerar en text
         )
         add_bar_values(
             ax2,
             bars2,
-            formatter=lambda v: f"{int(v):,}".replace(",", " ")
+            formatter=(formatter_antal if formatter2 == "antal" else formatter_mkr)
         )
 
     return ax, ax2

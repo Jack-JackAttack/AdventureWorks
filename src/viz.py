@@ -121,8 +121,6 @@ def line(
     return ax
 
 
-def format_mkr(v):
-    return f""
 
 def add_bar_values(
     ax,

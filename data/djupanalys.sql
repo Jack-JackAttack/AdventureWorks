@@ -87,7 +87,7 @@ SELECT
     pc.Name AS 'Category',
     SUM(ssod.OrderQty) AS 'AntalSåldaEnheter',
     SUM(ssod.LineTotal) AS 'TotalFörsäljning',
-    SUM((pp.ListPrice - pp.StandardCost) * ssod.OrderQty) AS TotalMarginal
+    SUM((pp.ListPrice - pp.StandardCost) * ssod.OrderQty) AS 'TotalMarginal'
 FROM Sales.SalesOrderDetail ssod
 JOIN Production.Product pp ON ssod.ProductID = pp.ProductID
 JOIN Production.ProductSubcategory ppsc ON pp.ProductSubcategoryID = ppsc.ProductSubcategoryID
@@ -96,3 +96,16 @@ GROUP BY
     pp.ProductID,
     pp.Name,
     pc.Name
+
+
+--Matris
+SELECT
+    pp.ProductID,
+    pp.Name,
+    SUM(ssod.LineTotal) AS 'TotalFörsäljning',
+    SUM((pp.ListPrice - pp.StandardCost) * ssod.OrderQty) AS 'TotalMarginal'
+FROM Sales.SalesOrderDetail ssod
+JOIN Production.Product pp ON ssod.ProductID = pp.ProductID
+GROUP BY
+    pp.ProductID,
+    pp.Name
